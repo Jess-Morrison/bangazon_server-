@@ -23,7 +23,7 @@ def check_user(request):
             'first_name': bangazon_user.first_name,
             'last_name': bangazon_user.last_name,
             'created_on': bangazon_user.created_on,
-            'image_url': bangazon_user.profile_image_url,
+            'image_url': bangazon_user.image_url,
             'uid': bangazon_user.uid,
         }
         return Response(data)
@@ -35,28 +35,28 @@ def check_user(request):
 
 @api_view(['POST'])
 def register_user(request):
-    '''Handles the creation of a new gamer for authentication
+    '''Handles the creation of a new user for authentication
 
     Method arguments:
       request -- The full HTTP request object
     '''
 
-    # Now save the user info in the levelupapi_gamer table
+    # Now save the user info in the bangazonapi_user table
     bangazon_user = User.objects.create(
         first_name=request.data['first_name'],
         last_name=request.data['last_name'],
         created_on=request.data['created_on'],
-        image_url=request.data['profile_image_url'],
+        image_url=request.data['image_url'],
         uid=request.data['uid']
     )
 
-    # Return the gamer info to the client
+    # Return the user info to the client
     data = {
         'id': bangazon_user.id,
         'first_name': bangazon_user.first_name,
         'last_name': bangazon_user.last_name,
         'created_on': bangazon_user.created_on,
-        'image_url': bangazon_user.profile_image_url,
+        'image_url': bangazon_user.image_url,
         'uid': bangazon_user.uid,
     }
     return Response(data)
