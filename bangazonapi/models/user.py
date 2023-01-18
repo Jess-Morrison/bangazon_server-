@@ -6,3 +6,5 @@ class User(models.Model):
     uid = models.CharField(max_length=50)
     created_on = models.DateField()
     image_url = models.CharField(max_length=200)
+
+
