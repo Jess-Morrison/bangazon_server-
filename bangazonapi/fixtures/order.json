@@ -1,0 +1,37 @@
+[
+  {   
+
+    "model": "bangazonapi.order",
+    "pk": 1,
+    "fields": {
+      "customer": "1",
+      "total_cost":"50.00",
+      "date_created":"2022-12-12",
+      "completed": true,
+      "quantity":3
+
+    }
+},
+{
+  "model": "bangazonapi.order",
+  "pk": 2,
+  "fields": {
+    "customer": "2",
+      "total_cost":"90.00",
+      "date_created":"2022-01-12",
+      "completed": true,
+      "quantity":1
+  }
+},
+{
+  "model": "bangazonapi.order",
+  "pk": 3,
+  "fields": {
+    "customer": "1",
+      "total_cost":"20.00",
+      "date_created":"2023-01-12",
+      "completed": false,
+      "quantity":2
+  }
+}
+]

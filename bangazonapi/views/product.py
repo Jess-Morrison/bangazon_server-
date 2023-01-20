@@ -17,6 +17,8 @@ class ProductView(ViewSet):
         product = Product.objects.get(pk=pk)
         serializer = ProductSerializer(product)
         return Response(serializer.data)
+      
+      
 
     def list(self, request):
         """Handle GET requests to get all products
@@ -26,6 +28,19 @@ class ProductView(ViewSet):
         """
         products = Product.objects.all() 
         serializer = ProductSerializer(products, many = True)
+        return Response(serializer.data)
+      
+    def list_seller_products(self, request):
+        """Handle GET requests to get all products by seller
+
+        Returns:
+            Response -- JSON serialized list of products
+        """
+        products = Product.objects.all() 
+        seller_products = request.quary_params.get('seller_id', None)
+        if seller_products is not None:
+          products = products.filter(seller_id=seller_products)
+        serializer = ProductSerializer(seller_products, many = True)
         return Response(serializer.data)
       
     def create(self, request):
