@@ -73,7 +73,7 @@ class ProductView(ViewSet):
         return Response(None, status=status.HTTP_204_NO_CONTENT)
     
 class ProductSerializer(serializers.ModelSerializer):
-    """JSON serializer for game types
+    """JSON serializer for products
     """
     class Meta:
         model = Product

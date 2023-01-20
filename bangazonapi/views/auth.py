@@ -6,7 +6,9 @@ from rest_framework.response import Response
 @api_view(['POST'])
 def check_user(request):
     '''Checks to see if User has associated Profile
-
+    First function that checks inside of the database to see if the user in the dB
+    if it is not finding the uid, you get redirectred to the reg user function 
+ 
     Method arguments:
     request -- The full HTTP request object
     '''
