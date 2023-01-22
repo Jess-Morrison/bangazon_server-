@@ -15,6 +15,7 @@ class ProductView(ViewSet):
             Response -- JSON serialized game type
         """
         product = Product.objects.get(pk=pk)
+        
         serializer = ProductSerializer(product)
         return Response(serializer.data)
       
@@ -36,7 +37,7 @@ class ProductView(ViewSet):
         Returns:
             Response -- JSON serialized list of products
         """
-        products = Product.objects.all() 
+        products = Product.objects.get(id=request.data["seller"])
         seller_products = request.quary_params.get('seller_id', None)
         if seller_products is not None:
           products = products.filter(seller_id=seller_products)
