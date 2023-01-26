@@ -4,24 +4,34 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework import serializers, status
 from bangazonapi.models import User, Product, Order, PaymentType, OrderProducts
+from bangazonapi.views import product
 
 
 
 class OrderView(ViewSet):
     """Level up user view"""
 
-    def retrieve(self, request, pk):
+    def retrieve(self, request, pk, **kwargs):
         """Handle GET requests for single order
 
         Returns:
             Response -- JSON serialized order
         """
         order = Order.objects.get(pk=pk)
-        order_products = OrderProducts.objects.get(id=request.data["order_id"])
-        if order.id == order_products:
-          order = order.filter(order=order_products)
+        product = Product.objects.get(pk=pk)
+        order_products = OrderProducts.objects.filter(order=order, product=product)
+        print(order_products)
+        # if order.id == order_products:
+        #   order = order.filter(order=order_products)
         
-        serializer = OrderSerializer(order)
+        data=[]
+        
+        serializer = OrderSerializer(order) 
+        product_serializer = ProductSerializer(product)
+        data.append(serializer)
+        data.append(product_serializer)
+        print(data)
+        
         return Response(serializer.data)
 
     def list(self, request):
@@ -147,4 +157,14 @@ class OrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
         fields = ('id', 'total_cost', 'date_created', 'completed',  'customer', 'quantity', 'order_products') 
+        depth = 1
+        
+
+
+class ProductSerializer(serializers.ModelSerializer):
+    """JSON serializer for products
+    """
+    class Meta:
+        model = Product
+        fields = ('id', 'seller', 'price', 'title', 'description', 'image_url', 'quantity_available') 
         depth = 1
