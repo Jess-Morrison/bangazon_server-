@@ -14,8 +14,28 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
+from django.conf.urls import include
 from django.urls import path
+from rest_framework import routers
+from bangazonapi.views import register_user, check_user, UserView, ProductView, PaymentTypeView, OrderView, OrderProductsView, ProductJointView, OrderJointView
+
+router = routers.DefaultRouter(trailing_slash=False)
+router.register(r'users', UserView, 'user')
+router.register(r'products', ProductView, 'product')
+router.register(r'paymenttypes', PaymentTypeView, 'paymenttype')
+router.register(r'orders', OrderView, 'order')
+router.register(r'orderproducts', OrderProductsView, 'orderproduct')
 
 urlpatterns = [
+    path('register', register_user),
+    path('checkuser', check_user),
     path('admin/', admin.site.urls),
+    path('', include(router.urls)),
+    # path('order/<int:order>/', OrderJointView.as_view(), name='order'),
+    # Tried 'orders next to the get and got this:
+    # AttributeError: 'OrderProductsView' object has no attribute 'orders'
+    # path('orderproduct/<int:order_id>/', OrderJointView.as_view(), name='order'),
+    path('order/<int:order_id>/', OrderJointView.as_view(), name='product'),
+    path('product/<int:order_id>/', ProductJointView.as_view(), name='order'),
+    # path('product/<int:order_id>/', ProductView.as_view(), name='order')
 ]

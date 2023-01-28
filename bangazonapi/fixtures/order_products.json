@@ -1,0 +1,30 @@
+[
+  {   
+
+    "model": "bangazonapi.orderproducts",
+    "pk": 1,
+    "fields": {
+      "order": 2,
+      "product": 1
+        }
+},
+{
+  "model": "bangazonapi.orderproducts",
+  "pk": 2,
+  "fields": {
+    "order": 3,
+    "product":2
+      }
+},
+
+{
+  "model": "bangazonapi.orderproducts",
+  "pk": 3,
+  "fields": {
+    "order": 3,
+    "product":3
+      }
+
+    }
+
+]

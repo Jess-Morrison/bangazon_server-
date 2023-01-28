@@ -1,0 +1,26 @@
+[
+  {
+    "model": "bangazonapi.paymenttype",
+    "pk": 1,
+    "fields": {
+      "payment_name": "Debit",
+      "account_number":"1361464151361"
+    }
+},
+{
+  "model": "bangazonapi.paymenttype",
+  "pk": 2,
+  "fields": {
+    "payment_name": "Cash",
+    "account_number": "0"
+  }
+},
+{
+  "model": "bangazonapi.paymenttype",
+  "pk": 3,
+  "fields": {
+    "payment_name": "Credit",
+    "account_number": "15565646946846"
+  }
+}
+]

@@ -1,0 +1,41 @@
+[
+  {
+      "model": "bangazonapi.product",
+      "pk": 1,
+      "fields": {
+        "price": 39.99,
+        "title":"Coldplay Parachutes Album",
+        "description":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco labo",
+        "image_url":"data:image/jpeg;base64,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",
+        "quantity_available": 2,
+        "seller": 1,
+        "order":2
+      }
+  },
+  {
+      "model": "bangazonapi.product",
+      "pk": 2,
+      "fields": {
+        "price": 189.99,
+        "title":"Turn Table",
+        "description":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco labo",
+        "image_url":"https://www.google.com/aclk?sa=l&ai=DChcSEwjR4NzjjdD8AhXqg1oFHXcPAE0YABABGgJ2dQ&sig=AOD64_3Eflx_YPL6v_ZBrnJLSsFnpNwTPQ&adurl&ctype=5&ved=2ahUKEwjp-s_jjdD8AhXUEVMKHQodC3wQvhd6BAgBEG8",
+        "quantity_available": 5,
+        "seller": 1,
+        "order": 3
+      }
+  },
+  {
+      "model": "bangazonapi.product",
+      "pk": 3,
+      "fields": {
+        "price": 50.99,
+        "title":"boa",
+        "description":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco labo",
+        "image_url":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRD8bvXl_xLFN8xWOq_ectWSTdiEOijaZ9KSg&usqp=CAU",
+        "quantity_available": 1,
+        "seller": 1,
+        "order": 3
+      }
+  }
+]
