@@ -4,6 +4,8 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework import serializers, status
 from bangazonapi.models import User, Product, Order, PaymentType, OrderProducts
+from rest_framework import generics
+from rest_framework.decorators import action
 
 
 
@@ -17,15 +19,15 @@ class OrderView(ViewSet):
             Response -- JSON serialized order
         """
         order = Order.objects.get(pk=pk)
-        order_products = OrderProducts.objects.get(id=request.data["order_id"])
-        if order.id == order_products:
-          order = order.filter(order=order_products)
+        # order_products = OrderProducts.objects.filter("order")
+        # if order == order_products:
+        #   order = order.filter(order_products=order_products)
         
         serializer = OrderSerializer(order)
         return Response(serializer.data)
 
     def list(self, request):
-        """Handle GET requests to get all orders
+        """Handle GET requests to get all the orders
 
         Returns:
             Response -- JSON serialized list of orders
@@ -34,13 +36,14 @@ class OrderView(ViewSet):
         serializer = OrderSerializer(orders, many = True)
         return Response(serializer.data)
       
-    def create(self, request):
+    def create(self, request, pk):
         """Handle POST operations
 
         Returns
             Response -- JSON serialized order instance
         """
         customer = User.objects.get(id=request.data["customer"])
+      
 
         order = Order.objects.create(
         total_cost=request.data["total_cost"],
@@ -66,8 +69,10 @@ class OrderView(ViewSet):
         order.quantity = request.data["quantity"]
         
 
-        customer = User.objects.get(pk=request.data["customer"])
-        order.customer = customer
+        # customer = User.objects.get(pk=request.data["customer"])
+        products = Product.objects.get(pk=request.data['products'])
+        # order.customer = customer
+        order.products = products
         order.save()
 
         return Response(None, status=status.HTTP_204_NO_CONTENT) 
@@ -146,5 +151,19 @@ class OrderSerializer(serializers.ModelSerializer):
     """
     class Meta:
         model = Order
-        fields = ('id', 'total_cost', 'date_created', 'completed',  'customer', 'quantity', 'order_products') 
-        depth = 1
+        fields = ('id', 'total_cost', 'date_created', 'completed',  'customer', 'quantity') 
+        depth = 2
+        
+class OrderProductSerializer(serializers.ModelSerializer):
+    """JSON serializer for products
+    """
+    class Meta:
+        model = OrderProducts
+        fields = ('id', 'order', 'product') 
+        depth = 2
+
+class OrderJointView(generics.ListCreateAPIView):
+  serializer_class = OrderProductSerializer
+  def get_queryset(self):
+    order_id = self.kwargs['order_id']
+    return OrderProducts.objects.filter(order__id=order_id)

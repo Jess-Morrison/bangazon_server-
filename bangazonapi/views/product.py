@@ -3,6 +3,9 @@ from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 from rest_framework import serializers, status
 from bangazonapi.models import User, Product
+from rest_framework import generics
+from rest_framework.decorators import action
+
 
 
 class ProductView(ViewSet):
@@ -93,5 +96,12 @@ class ProductSerializer(serializers.ModelSerializer):
     """
     class Meta:
         model = Product
-        fields = ('id', 'seller', 'price', 'title', 'description', 'image_url', 'quantity_available') 
+        fields = ('id', 'seller', 'price', 'title', 'description', 'image_url', 'quantity_available', 'order_id') 
         depth = 1
+
+
+class ProductJointView(generics.ListCreateAPIView):
+    serializer_class = ProductSerializer
+    def get_queryset(self):
+      order_id = self.kwargs['order_id']
+      return Product.objects.filter(order__id=order_id)

@@ -4,8 +4,8 @@ from django.db import models
 
 class Order(models.Model):
   customer = models.ForeignKey("User", on_delete=models.CASCADE)
-  # products = models.ForeignKey("Product", on_delete=models.CASCADE, unique=True)
-  # order_products = models.ManyToManyField(OrderProducts)
+  # products = models.ForeignKey("Product", on_delete=models.CASCADE)
+  order_products = models.ForeignKey("OrderProducts", on_delete=models.CASCADE)
   total_cost = models.FloatField()
   date_created = models.DateField()
   completed = models.BooleanField()

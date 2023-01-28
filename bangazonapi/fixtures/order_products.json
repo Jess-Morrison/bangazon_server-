@@ -4,16 +4,16 @@
     "model": "bangazonapi.orderproducts",
     "pk": 1,
     "fields": {
-      "order": 1,
-      "product": 3
+      "order": 2,
+      "product": 1
         }
 },
 {
   "model": "bangazonapi.orderproducts",
   "pk": 2,
   "fields": {
-    "order": 1,
-    "product":1
+    "order": 3,
+    "product":2
       }
 },
 
@@ -21,25 +21,10 @@
   "model": "bangazonapi.orderproducts",
   "pk": 3,
   "fields": {
-    "order": 2,
-    "product":3
-      }
-},
-{
-  "model": "bangazonapi.orderproducts",
-  "pk": 4,
-  "fields": {
     "order": 3,
     "product":3
       }
-},
-{
-  "model": "bangazonapi.orderproducts",
-  "pk": 5,
-  "fields": {
-    "order": 3,
-    "product": 1
-      }
-}
+
+    }
 
 ]

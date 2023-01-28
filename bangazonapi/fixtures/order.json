@@ -8,8 +8,8 @@
       "total_cost":"89.00",
       "date_created":"2022-12-12",
       "completed": true,
-      "quantity":2,
-      "order_products":""
+      "quantity":2
+      
 
     }
 },
@@ -21,8 +21,7 @@
       "total_cost":"50.00",
       "date_created":"2022-01-12",
       "completed": true,
-      "quantity":1,
-      "order_products":""
+      "quantity":1
   }
 },
 {
@@ -33,8 +32,7 @@
       "total_cost":"118.00",
       "date_created":"2023-01-12",
       "completed": false,
-      "quantity":2,
-      "order_products":""
+      "quantity":2
   }
 }
 ]
