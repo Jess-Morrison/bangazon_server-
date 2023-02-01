@@ -11,13 +11,13 @@ from bangazonapi.models.product import Product
 class OrderProductsView(ViewSet):
     """Level up user view"""
 
-    def retrieve(self, request, pk):
+    def retrieve(self, request, order):
         """Handle GET requests for single order
 
         Returns:
             Response -- JSON serialized order
         """
-        order_products = OrderProducts.objects.get(pk=pk)
+        order_products = OrderProducts.objects.filter(order)
         # orders = Order.objects.filter(id=order_products.order.id)
         # print(order_products)
         # # orders = Order.objects.get(pk-pk)
@@ -29,13 +29,17 @@ class OrderProductsView(ViewSet):
         serializer = OrderProductSerializer(order_products)
         return Response(serializer.data)
 
-    def list(self, request):
+    def list(self,request):
         """Handle GET requests to get all orders
+        Put in a query string
 
         Returns:
             Response -- JSON serialized list of orders
         """
         order_products = OrderProducts.objects.all() 
+        order = request.query_params.get('order_id', None)
+        if order is not None:
+          order_products = order_products.filter(order=order)
         serializer = OrderProductSerializer(order_products, many = True)
         return Response(serializer.data)
 
@@ -44,7 +48,7 @@ class OrderProductSerializer(serializers.ModelSerializer):
     """
     class Meta:
         model = OrderProducts
-        fields = ('id', 'order', 'product') 
+        fields = ('id', 'order', 'product', 'customer') 
         depth = 1
 
 # class OrderJointView(generics.ListCreateAPIView):
