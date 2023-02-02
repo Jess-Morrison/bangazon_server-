@@ -1,3 +1,4 @@
+from tkinter import TRUE
 from django.http import HttpResponseServerError
 from rest_framework.viewsets import ViewSet
 from rest_framework.decorators import action
@@ -36,12 +37,50 @@ class OrderProductsView(ViewSet):
         Returns:
             Response -- JSON serialized list of orders
         """
+        #You will need to filter here in order to get the correct items to render to the DOM
+        #First, get values by keys 
+        #Query parameters are a set of key-value pairs that are appended to the end of a URL and used to pass additional information to the server. In Django, request.query_params is a dictionary-like object that contains the query parameters for a given request. 
+        
+        product = request.query_params.get('product')
+        order = request.query_params.get('order')
+        customer = request.query_params.get('customer')
+        completed = request.query_params.get(False)
+        
         order_products = OrderProducts.objects.all() 
-        order = request.query_params.get('order_id', None)
+        #Now filter out the data through the use of conditionals. I.e if this, filter by this,etc
+        
+        if completed is not TRUE:
+            order_products = order_products.filter(completed=completed)
+        if product is not None:
+            order_products = order_products.filter(product=product)
         if order is not None:
-          order_products = order_products.filter(order=order)
+            order_products = order_products.filter(order=order)
+        if customer is not None:
+            order_products = order_products.filter(customer=customer)
+            
         serializer = OrderProductSerializer(order_products, many = True)
         return Response(serializer.data)
+        
+        # order = request.query_params.get('order_id', None)
+        # if order is not None:
+        #   order_products = order_products.filter(order=order)
+        # serializer = OrderProductSerializer(order_products, many = True)
+        # return Response(serializer.data)
+        
+    def update(self, request, pk):
+      """Update a Order Product"""
+      order_product = OrderProducts.objects.get(pk=pk)
+      order_product.product = Product.objects.get(pk=request.data["product"])
+      order_product.order = Order.objects.get(pk=request.data['order'])
+      order_product.save()
+      return Response({'success': True}, status=status.HTTP_202_ACCEPTED)
+  
+    def destroy(self, request, pk):
+      """Delete a Order product"""
+      order_product = OrderProducts.objects.get(pk=pk)
+      order_product.delete()
+      return Response(None, status=status.HTTP_204_NO_CONTENT)    
+        
 
 class OrderProductSerializer(serializers.ModelSerializer):
     """JSON serializer for products
