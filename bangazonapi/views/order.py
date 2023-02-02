@@ -1,4 +1,5 @@
 from django.http import HttpResponseServerError
+from django.db.models import Q 
 from rest_framework.viewsets import ViewSet
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -9,8 +10,12 @@ from rest_framework.decorators import action
 
 
 
+
 class OrderView(ViewSet):
-    """Level up user view"""
+    """Level up order view"""
+    
+    #You will have to drill down the data on the back end so it can be rendered correctly on the front end if you want to see that specific object that is.
+    #Will need to drill down and get all the products(need to be put in a list so you can map to get each product attached to an array), 
 
     def retrieve(self, request, pk):
         """Handle GET requests for single order
@@ -30,7 +35,20 @@ class OrderView(ViewSet):
         Returns:
             Response -- JSON serialized list of orders
         """
+        #You will have to drill down here and get the values by keys by using query param
+        #and do a set of conditionals to filter based off of the given keys 
+        completed = request.query_params.get('completed')
+        customer = request.query_params.get("customer")
+        
         orders = Order.objects.all() 
+        
+        if customer and completed:
+          orders = orders.filter(Q(completed=completed) & Q(customer=customer))
+        elif customer:
+          orders = orders.filter(customer=customer)
+        elif completed:
+          orders = orders.filter(completed=completed)
+          
         serializer = OrderSerializer(orders, many = True)
         return Response(serializer.data)
       
@@ -40,6 +58,8 @@ class OrderView(ViewSet):
             Response -- JSON serialized order instance
         """
         customer = User.objects.get(id=request.data["customer"])
+        products =Product.objects.get(id=request.data["customer"])
+        payment_types = PaymentType.objects.get(id=request.data["payment_types"])
       
 
         order = Order.objects.create(
@@ -47,8 +67,35 @@ class OrderView(ViewSet):
         date_created=request.data["date_created"],
         completed=request.data["completed"],
         quantity=request.data["quantity"],
-        customer=customer
+        products=products,
+        customer=customer,
+        payment_types=payment_types
         )
+        
+        completed = 'in-progress'
+        if 'completed' in request.data:
+          completed = request.data['completed']
+        if completed != 'in-progress':
+          try:
+              payment_types = PaymentType.objects.get(pk=request.data["payment_types"])
+          except PaymentType.DoesNotExist:
+              return Response({"message": "Invalid payment, please try again"}, status=status.HTTP_400_BAD_REQUEST)
+        else:
+          payment_types = None
+          
+        order = Order.objects.create(customer=customer, payment_types=payment_types, completed=completed)
+        total = 0
+        list_of_products = []
+        for product in products:
+          try:
+              product_obj = Product.objects.get(id=product['id'])
+          except Product.DoesNotExist:
+              return Response({"message": f"Product {product['id']} does not exist"})
+          product_obj.remove_from_inventory(product['quantity'])
+          OrderProducts.objects.create(product=product_obj, order=order, quantity=product['quantity'])
+          list_of_products.append(product_obj)
+          total += product_obj.price * product['quantity'] 
+          
         serializer = OrderSerializer(order)
         return Response(serializer.data)
     
@@ -147,7 +194,7 @@ class OrderSerializer(serializers.ModelSerializer):
     """
     class Meta:
         model = Order
-        fields = ('id', 'total_cost', 'date_created', 'completed',  'customer', 'quantity') 
+        fields = ('id', 'total_cost', 'date_created', 'completed',  'customer', 'quantity', 'products', 'payment_types') 
         depth = 2
         
 class OrderProductSerializer(serializers.ModelSerializer):
@@ -155,7 +202,7 @@ class OrderProductSerializer(serializers.ModelSerializer):
     """
     class Meta:
         model = OrderProducts
-        fields = ('id', 'order', 'product') 
+        fields = ('id', 'order', 'product', 'customer') 
         depth = 2
 
 class OrderJointView(generics.ListCreateAPIView):

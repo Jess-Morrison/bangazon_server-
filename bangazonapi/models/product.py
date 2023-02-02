@@ -11,3 +11,6 @@ class Product(models.Model):
   quantity_available = models.IntegerField(default=0)
   
   
+def remove_from_inventory(self, quantity):
+        self.inventory -= quantity
+        self.save()
