@@ -13,63 +13,27 @@ class ProductView(ViewSet):
 
     def retrieve(self, request, pk):
         """Handle GET requests for single game type
-
         Returns:
             Response -- JSON serialized game type
         """
-        # product = Product.objects.get(pk=pk)
+        product = Product.objects.get(pk=pk)
         
-        try:
-            product = Product.objects.get(pk=pk)
-
-            serializer = ProductSerializer(product)
-            product_serial = serializer.data
-            product_serial['seller'] = product_serial.pop('seller')
-            product_serial['order'] = product_serial.pop('order')
-            product_serial['imageUrl'] = product_serial.pop('image_url')
-            product_serial['price'] = product_serial.pop('price')
-            product_serial['title'] = product_serial.pop('title')
-            product_serial['description'] = product_serial.pop('description')
-            product_serial['quantityAvailable'] = product_serial.pop('quantity_available')
-        
-        # serializer = ProductSerializer(product)
-            return Response(serializer.data)
-        except Product.DoesNotExist as ex:
-            return Response({'message': 'Unable to fetch data. '
-                             + ex.args[0]}, status=status.HTTP_404_NOT_FOUND)
+        serializer = ProductSerializer(product)
+        return Response(serializer.data)
+      
       
 
     def list(self, request):
         """Handle GET requests to get all products
-
         Returns:
             Response -- JSON serialized list of products
         """
-        # products = Product.objects.all() 
-        # serializer = ProductSerializer(products, many = True)
-        # return Response(serializer.data)
-        
-        try:
-            seller= request.GET.get("seller")
-            products = Product.objects.all()
-            serializer = ProductSerializer(products, many=True)
-            prod_serializer = serializer.data
-            for product in prod_serializer:
-                product['seller'] = product.pop('seller')
-                product['order'] = product.pop('order')
-                product['imageUrl'] = product.pop('image_url')
-                product['price'] = product.pop('price')
-                product['title'] = product.pop('title')
-                product['description'] = product.pop('description')
-                product['quantityAvailable'] = product.pop('quantity_available')
-            return Response(prod_serializer)
-        except Product.DoesNotExist as ex:
-            return Response({'message': 'Unable to get data. '
-                             + ex.args[0]}, status=status.HTTP_404_NOT_FOUND)
+        products = Product.objects.all() 
+        serializer = ProductSerializer(products, many = True)
+        return Response(serializer.data)
       
     def list_seller_products(self, request):
         """Handle GET requests to get all products by seller
-
         Returns:
             Response -- JSON serialized list of products
         """
@@ -82,12 +46,10 @@ class ProductView(ViewSet):
       
     def create(self, request):
         """Handle POST operations
-
         Returns
             Response -- JSON serialized game instance
         """
         seller = User.objects.get(id=request.data["seller"])
-        order = Order.objects.get(id=request.data["order"])
 
         product = Product.objects.create(
         price=request.data["price"],
@@ -95,15 +57,13 @@ class ProductView(ViewSet):
         description=request.data["description"],
         image_url=request.data["image_url"],
         quantity_available=request.data["quantity_available"],
-        seller=seller,
-        order=order
+        seller=seller
         )
         serializer = ProductSerializer(product)
         return Response(serializer.data)
     
     def update(self, request, pk):
         """Handle PUT requests for a product
-
         Returns:
             Response -- Empty body with 204 status code
         """
@@ -131,7 +91,7 @@ class ProductSerializer(serializers.ModelSerializer):
     """
     class Meta:
         model = Product
-        fields = ('id', 'seller', 'price', 'title', 'description', 'image_url', 'quantity_available', 'order') 
+        fields = ('id', 'seller', 'price', 'title', 'description', 'image_url', 'quantity_available', 'order_id') 
         depth = 1
 
 

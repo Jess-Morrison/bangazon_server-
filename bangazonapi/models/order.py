@@ -4,7 +4,7 @@ from django.db import models
 
 class Order(models.Model):
   customer = models.ForeignKey("User", on_delete=models.CASCADE)
-  # products = models.ForeignKey("Product", on_delete=models.CASCADE)
+  products = models.ManyToManyField("Product", through="OrderProducts", related_name="order")
   # order_products = models.ForeignKey("OrderProducts", on_delete=models.CASCADE)
   payment_types = models.ForeignKey("PaymentType", on_delete=models.CASCADE)
   total_cost = models.FloatField()
