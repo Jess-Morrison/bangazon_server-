@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.conf.urls import include
 from django.urls import path
 from rest_framework import routers
-from bangazonapi.views import register_user, check_user, UserView, ProductView, PaymentTypeView, OrderView, OrderProductsView, ProductJointView, OrderJointView
+from bangazonapi.views import register_user, check_user, UserView, ProductView, PaymentTypeView, OrderView, OrderProductsView, ProductJointView, OrderJointView, OrderCustomerJointView
 
 router = routers.DefaultRouter(trailing_slash=False)
 router.register(r'users', UserView, 'user')
@@ -36,6 +36,7 @@ urlpatterns = [
     # AttributeError: 'OrderProductsView' object has no attribute 'orders'
     # path('orderproduct/<int:order_id>/', OrderJointView.as_view(), name='order'),
     path('order/<int:order_id>/', OrderJointView.as_view(), name='product'),
+    path('orderByCustomer/<int:customer_id>/', OrderCustomerJointView.as_view(), name='customer'),
     path('product/<int:order_id>/', ProductJointView.as_view(), name='order'),
     # path('product/<int:order_id>/', ProductView.as_view(), name='order')
 ]

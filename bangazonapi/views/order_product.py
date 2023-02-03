@@ -44,12 +44,14 @@ class OrderProductsView(ViewSet):
         product = request.query_params.get('product')
         order = request.query_params.get('order')
         customer = request.query_params.get('customer')
-        completed = request.query_params.get(False)
+        # completed = request.query_params.get(False)
+        completed = request.query_params.get('completed')
         
         order_products = OrderProducts.objects.all() 
         #Now filter out the data through the use of conditionals. I.e if this, filter by this,etc
         
-        if completed is not TRUE:
+        # if completed is not TRUE:
+        if completed is not None:
             order_products = order_products.filter(completed=completed)
         if product is not None:
             order_products = order_products.filter(product=product)

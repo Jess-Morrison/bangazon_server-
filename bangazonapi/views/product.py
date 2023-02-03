@@ -91,7 +91,7 @@ class ProductSerializer(serializers.ModelSerializer):
     """
     class Meta:
         model = Product
-        fields = ('id', 'seller', 'price', 'title', 'description', 'image_url', 'quantity_available', 'order_id') 
+        fields = ('id', 'seller', 'price', 'title', 'description', 'image_url', 'quantity_available') 
         depth = 1
 
 
@@ -100,3 +100,5 @@ class ProductJointView(generics.ListCreateAPIView):
     def get_queryset(self):
       order_id = self.kwargs['order_id']
       return Product.objects.filter(order__id=order_id)
+    
+

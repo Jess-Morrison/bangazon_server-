@@ -210,3 +210,9 @@ class OrderJointView(generics.ListCreateAPIView):
   def get_queryset(self):
     order_id = self.kwargs['order_id']
     return OrderProducts.objects.filter(order__id=order_id)
+
+class OrderCustomerJointView(generics.ListCreateAPIView):
+    serializer_class = OrderProductSerializer
+    def get_queryset(self):
+      customer_id = self.kwargs['customer_id']
+      return OrderProducts.objects.filter(customer__id=customer_id)
